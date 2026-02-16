@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: warehouse_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7
+    container_name: warehouse_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: ./backend
+    container_name: warehouse_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      PORT: ${PORT}
+      MONGO_URI: ${MONGO_URI_DOCKER}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      REDIS_URL: ${REDIS_URL_DOCKER}
+
+volumes:
+  mongo_data:

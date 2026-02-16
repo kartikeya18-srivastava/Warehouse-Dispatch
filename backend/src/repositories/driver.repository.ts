@@ -1,0 +1,51 @@
+import { Driver, IDriver } from "../models/driver.model";
+
+export const createDriver = async (
+    data: Omit<IDriver, "_id" | "createdAt" | "updatedAt">
+): Promise<IDriver> => {
+    return Driver.create(data);
+};
+
+export const findDriverByUserId = async (
+    userId: string
+): Promise<IDriver | null> => {
+    return Driver.findOne({ userId });
+};
+
+export const getAvailableDriversByZone = async (
+    zone: string
+): Promise<IDriver[]> => {
+    return Driver.find({
+        zone,
+        isAvailable: true
+    });
+};
+
+export const updateDriverAvailability = async (
+    id: string,
+    isAvailable: boolean
+): Promise<IDriver | null> => {
+    return Driver.findByIdAndUpdate(
+        id,
+        { isAvailable },
+        { new: true }
+    );
+};
+
+export const updateDriverLoad = async (
+    id: string,
+    currentLoad: number
+): Promise<IDriver | null> => {
+    return Driver.findByIdAndUpdate(
+        id,
+        { currentLoad },
+        { new: true }
+    );
+};
+
+export const updateDriver = async (
+    id: string,
+    data: Partial<IDriver>
+): Promise<IDriver | null> => {
+    return Driver.findByIdAndUpdate(id, data, { new: true });
+};

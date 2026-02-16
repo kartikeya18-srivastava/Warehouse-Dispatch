@@ -1,0 +1,8 @@
+{"error":{},"level":"error","message":"Unhandled error","timestamp":"2026-02-16T06:19:32.892Z"}
+{"error":{"message":"jwt malformed","name":"JsonWebTokenError"},"level":"error","message":"Unhandled error","timestamp":"2026-02-16T07:03:44.121Z"}
+{"error":{"message":"jwt malformed","name":"JsonWebTokenError"},"level":"error","message":"Unhandled error","timestamp":"2026-02-16T07:04:01.245Z"}
+{"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Unhandled error","timestamp":"2026-02-16T07:24:17.983Z"}
+{"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Unhandled error","timestamp":"2026-02-16T07:24:27.368Z"}
+{"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Unhandled error","timestamp":"2026-02-16T07:25:31.355Z"}
+{"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Unhandled error","timestamp":"2026-02-16T07:25:46.121Z"}
+{"error":{},"level":"error","message":"Unhandled error","timestamp":"2026-02-16T08:11:33.585Z"}

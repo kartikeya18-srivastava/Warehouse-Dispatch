@@ -1,0 +1,93 @@
+import { Schema, model, Document, Types } from "mongoose";
+import { ShipmentStatus } from "../constants/shipmentStatus";
+import { ShipmentType } from "../constants/shipmentType";
+import { ShipmentPriority } from "../constants/priorities";
+
+export interface IShipmentBase {
+    trackingId: string;
+    sku: string;
+    quantity: number;
+    type: ShipmentType;
+    priority: ShipmentPriority;
+    zone: string;
+    origin: string;
+    destination: string;
+    weight: number;
+    volume: number;
+    status: ShipmentStatus;
+    assignedDriverId?: Types.ObjectId;
+}
+
+export interface IShipment extends IShipmentBase, Document {
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const shipmentSchema = new Schema<IShipment>(
+    {
+        trackingId: {
+            type: String,
+            required: true,
+            unique: true,
+            index: true
+        },
+        sku: {
+            type: String,
+            required: true
+        },
+        quantity: {
+            type: Number,
+            required: true,
+            min: 1
+        },
+        type: {
+            type: String,
+            enum: Object.values(ShipmentType),
+            required: true
+        },
+        priority: {
+            type: String,
+            enum: Object.values(ShipmentPriority),
+            required: true,
+            index: true
+        },
+        zone: {
+            type: String,
+            required: true,
+            index: true
+        },
+        origin: {
+            type: String,
+            required: true
+        },
+        destination: {
+            type: String,
+            required: true
+        },
+        weight: {
+            type: Number,
+            required: true
+        },
+        volume: {
+            type: Number,
+            required: true
+        },
+        status: {
+            type: String,
+            enum: Object.values(ShipmentStatus),
+            default: ShipmentStatus.PACKED,
+            index: true
+        },
+        assignedDriverId: {
+            type: Schema.Types.ObjectId,
+            ref: "Driver"
+        }
+    },
+    { timestamps: true }
+);
+
+// Compound indexes for efficient queries
+shipmentSchema.index({ status: 1, priority: -1, createdAt: 1 });
+shipmentSchema.index({ zone: 1, status: 1 });
+
+export const Shipment = model<IShipment>("Shipment", shipmentSchema);
