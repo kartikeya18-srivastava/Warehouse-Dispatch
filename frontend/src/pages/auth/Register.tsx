@@ -4,9 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../../services/authApi";
-import Button from "../../components/Button";
-import Input from "../../components/Input";
-import Card from "../../components/Card";
+import { Icons } from "../../components/Icons";
 
 const registerSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
@@ -41,101 +39,171 @@ const RegisterPage = () => {
 
     if (isRegistered) {
         return (
-            <div className="w-full">
-                <Card className="w-full p-10 text-center glass animate-fade-in shadow-2xl">
+            <div className="w-full animate-fade-in">
+                <div className="p-12 rounded-[2.5rem] bg-white border border-border-subtle shadow-2xl shadow-slate-200/50 text-center">
                     <div className="mb-8 flex justify-center">
-                        <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M22 17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9.5C2 7 4 5 6.5 5H18c2.5 0 4 2 4 4.5V17z" /><path d="m2 9.5 10 6 10-6" /></svg>
+                        <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center text-primary shadow-lg shadow-primary/10">
+                            <Icons.CheckCircle className="w-10 h-10" />
                         </div>
                     </div>
-                    <h1 className="text-2xl font-black text-slate-900 mb-4 tracking-tight">Check your email</h1>
-                    <p className="text-slate-500 font-medium leading-relaxed mb-8">
-                        We've sent a verification link to your email address. Please click the link to activate your account.
+                    <h2 className="text-3xl font-black text-txt-main mb-4 tracking-tighter">Registration Complete</h2>
+                    <p className="text-sm text-txt-muted font-medium leading-relaxed mb-10 max-w-sm mx-auto uppercase tracking-widest">
+                        We've sent a verification link to your terminal. Check your inbox to activate your credentials.
                     </p>
                     <button
                         onClick={() => navigate("/login")}
-                        className="inline-flex items-center justify-center w-full py-4 bg-primary text-white font-black uppercase tracking-widest rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/40 transition-all hover:-translate-y-1"
+                        className="btn-premium btn-primary py-4 px-10 text-xs shadow-xl shadow-primary/30"
                     >
-                        Go to Sign In
+                        Return to Console
                     </button>
-                </Card>
+                </div>
             </div>
         );
     }
 
     return (
         <div className="w-full">
-            <Card className="w-full p-8 glass animate-fade-in shadow-2xl">
-                <div className="text-center mb-8">
-                    <h1 className="text-4xl font-black text-slate-900 tracking-tighter mb-2 italic">WAREHOUSE</h1>
-                    <p className="text-slate-500 font-medium">Create your operative account</p>
-                </div>
+            <div className="text-center mb-8">
+                <h1 className="text-4xl font-black text-txt-main mb-2 tracking-tighter">
+                    Platform Onboarding
+                </h1>
+                <p className="text-sm text-txt-muted font-black uppercase tracking-[0.2em]">Deployment Protocol v1.0</p>
+            </div>
 
+            <div className="p-10 rounded-[2.5rem] bg-white border border-border-subtle shadow-2xl shadow-slate-200/50">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <Input
-                        label="Full Name"
-                        placeholder="John Doe"
-                        {...registerField("name")}
-                        error={errors.name?.message}
-                    />
-                    <Input
-                        label="Email Address"
-                        placeholder="john@warehouse.com"
-                        {...registerField("email")}
-                        error={errors.email?.message}
-                    />
-                    <Input
-                        label="Password"
-                        type="password"
-                        placeholder="••••••••"
-                        {...registerField("password")}
-                        error={errors.password?.message}
-                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-txt-muted uppercase tracking-widest ml-1">
+                                Operational Name
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="John Doe"
+                                className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 text-txt-main placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all font-bold text-sm"
+                                {...registerField("name")}
+                            />
+                            {errors.name && (
+                                <p className="text-[10px] font-black text-red-400 mt-1 ml-1 uppercase">{errors.name.message}</p>
+                            )}
+                        </div>
 
-                    <div className="space-y-1.5">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Assigned Role</label>
-                        <select
-                            {...registerField("role")}
-                            className="w-full px-4 py-3 rounded-xl bg-white border border-slate-100 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none transition-all"
-                        >
-                            <option value="">Select Role</option>
-                            <option value="ADMIN">Administrator</option>
-                            <option value="DISPATCHER">Dispatcher</option>
-                            <option value="DRIVER">Driver</option>
-                            <option value="WAREHOUSE_MANAGER">Warehouse Manager</option>
-                        </select>
-                        {errors.role && <p className="text-[10px] font-black text-red-500 mt-1 ml-1 uppercase">{errors.role.message}</p>}
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-txt-muted uppercase tracking-widest ml-1">
+                                System Email
+                            </label>
+                            <input
+                                type="email"
+                                placeholder="john@warehouse.com"
+                                className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 text-txt-main placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all font-bold text-sm"
+                                {...registerField("email")}
+                            />
+                            {errors.email && (
+                                <p className="text-[10px] font-black text-red-400 mt-1 ml-1 uppercase">{errors.email.message}</p>
+                            )}
+                        </div>
                     </div>
 
-                    <Input
-                        label="Assigned Zone"
-                        placeholder="e.g. Zone-A, North-WH"
-                        {...registerField("zone")}
-                        error={errors.zone?.message}
-                    />
-
-                    <div className="space-y-1.5">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Working Shift</label>
-                        <select
-                            {...registerField("shift")}
-                            className={`w-full p-3 rounded-xl border ${errors.shift ? 'border-red-500' : 'border-slate-200'} bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-medium text-slate-600`}
-                        >
-                            <option value="MORNING">Morning (06:00 - 14:00)</option>
-                            <option value="AFTERNOON">Afternoon (14:00 - 22:00)</option>
-                            <option value="NIGHT">Night (22:00 - 06:00)</option>
-                        </select>
-                        {errors.shift && <p className="text-[10px] font-black text-red-500 mt-1 ml-1 uppercase">{errors.shift.message}</p>}
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black text-txt-muted uppercase tracking-widest ml-1">
+                            Access Key
+                        </label>
+                        <input
+                            type="password"
+                            placeholder="••••••••"
+                            className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 text-txt-main placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all font-bold text-sm"
+                            {...registerField("password")}
+                        />
+                        {errors.password && (
+                            <p className="text-[10px] font-black text-red-400 mt-1 ml-1 uppercase">{errors.password.message}</p>
+                        )}
                     </div>
 
-                    <Button type="submit" className="w-full py-4 text-sm tracking-widest" isLoading={isLoading}>
-                        CREATE ACCOUNT
-                    </Button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-txt-muted uppercase tracking-widest ml-1">
+                                Clearance Level
+                            </label>
+                            <div className="relative">
+                                <select
+                                    {...registerField("role")}
+                                    className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 text-txt-main focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all font-bold text-sm appearance-none cursor-pointer"
+                                >
+                                    <option value="" className="text-slate-400">Select Grade</option>
+                                    <option value="ADMIN">Administrator</option>
+                                    <option value="DISPATCHER">Dispatcher</option>
+                                    <option value="DRIVER">Driver</option>
+                                    <option value="WAREHOUSE_MANAGER">Warehouse Manager</option>
+                                </select>
+                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-txt-muted">
+                                    <Icons.Filter className="w-4 h-4" />
+                                </div>
+                            </div>
+                            {errors.role && (
+                                <p className="text-[10px] font-black text-red-400 mt-1 ml-1 uppercase">{errors.role.message}</p>
+                            )}
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-txt-muted uppercase tracking-widest ml-1">
+                                Assigned Sector
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Sector-4 / North"
+                                className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 text-txt-main placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all font-bold text-sm"
+                                {...registerField("zone")}
+                            />
+                            {errors.zone && (
+                                <p className="text-[10px] font-black text-red-400 mt-1 ml-1 uppercase">{errors.zone.message}</p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black text-txt-muted uppercase tracking-widest ml-1">
+                            Operational Shift
+                        </label>
+                        <div className="relative">
+                            <select
+                                {...registerField("shift")}
+                                className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 text-txt-main focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all font-bold text-sm appearance-none cursor-pointer"
+                            >
+                                <option value="MORNING">Alpha (06:00 - 14:00)</option>
+                                <option value="AFTERNOON">Beta (14:00 - 22:00)</option>
+                                <option value="NIGHT">Gamma (22:00 - 06:00)</option>
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-txt-muted">
+                                <Icons.Clock className="w-4 h-4" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="w-full mt-4 btn-premium btn-primary py-5 text-xs shadow-xl shadow-primary/30 active:scale-95 disabled:opacity-50"
+                    >
+                        {isLoading ? (
+                            <div className="flex items-center justify-center gap-3">
+                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                Provisioning Credentials...
+                            </div>
+                        ) : (
+                            "Request Console Access"
+                        )}
+                    </button>
                 </form>
 
-                <div className="mt-8 text-center text-xs font-bold text-slate-400 uppercase tracking-widest">
-                    Already an operative? <Link to="/login" className="text-primary hover:underline">Sign In</Link>
+                <div className="mt-8 pt-8 border-t border-border-subtle text-center">
+                    <p className="text-[10px] font-black text-txt-muted uppercase tracking-[0.15em]">
+                        Existing Operator?{" "}
+                        <Link to="/login" className="text-primary hover:text-secondary transition-colors underline decoration-primary/20 underline-offset-4">
+                            Connect Now
+                        </Link>
+                    </p>
                 </div>
-            </Card>
+            </div>
         </div>
     );
 };

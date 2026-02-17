@@ -4,7 +4,7 @@ import MainLayout from "../layouts/MainLayout";
 import AuthLayout from "../layouts/AuthLayout";
 import ProtectedRoute from "../router/ProtectedRoute";
 
-// Lazy load all page components
+const LandingPage = lazy(() => import("../pages/LandingPage"));
 const LoginPage = lazy(() => import("../pages/auth/Login"));
 const RegisterPage = lazy(() => import("../pages/auth/Register"));
 const VerifyEmailPage = lazy(() => import("../pages/auth/VerifyEmail"));
@@ -17,7 +17,6 @@ const DriversPage = lazy(() => import("../pages/drivers/Drivers"));
 const DeliveriesPage = lazy(() => import("../pages/deliveries/Deliveries"));
 const NotificationsPage = lazy(() => import("../pages/notifications/Notifications"));
 
-// Loading fallback component
 const PageLoader = () => (
     <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
@@ -27,7 +26,6 @@ const PageLoader = () => (
     </div>
 );
 
-// Wrapper component for Suspense
 const SuspenseWrapper = ({ children }: { children: React.ReactNode }) => (
     <Suspense fallback={<PageLoader />}>
         {children}
@@ -35,6 +33,10 @@ const SuspenseWrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 export const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <SuspenseWrapper><LandingPage /></SuspenseWrapper>
+    },
     {
         element: <AuthLayout />,
         children: [
@@ -52,12 +54,12 @@ export const router = createBrowserRouter([
         ),
         children: [
             {
-                index: true,
-                element: <SuspenseWrapper><HomePage /></SuspenseWrapper>
-            },
-            {
                 path: "/dashboard",
                 element: <SuspenseWrapper><DashboardPage /></SuspenseWrapper>
+            },
+            {
+                path: "/home",
+                element: <SuspenseWrapper><HomePage /></SuspenseWrapper>
             },
             {
                 path: "/shipments",

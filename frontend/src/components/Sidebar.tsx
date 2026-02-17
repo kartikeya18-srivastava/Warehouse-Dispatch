@@ -22,7 +22,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
     };
 
     const allNavItems = [
-        { label: "Home", path: "/", icon: <Icons.Dashboard className="w-5 h-5" />, roles: ["admin", "warehouse_manager", "dispatcher", "driver"] },
+        { label: "Home", path: "/home", icon: <Icons.Dashboard className="w-5 h-5" />, roles: ["admin", "warehouse_manager", "dispatcher", "driver"] },
         { label: "Analytics", path: "/analytics", icon: <Icons.Dashboard className="w-5 h-5" />, roles: ["admin", "warehouse_manager", "dispatcher"] },
         { label: "Shipments", path: "/shipments", icon: <Icons.Package className="w-5 h-5" />, roles: ["admin", "warehouse_manager", "dispatcher"] },
         { label: "Dispatch", path: "/dispatch", icon: <Icons.Package className="w-5 h-5" />, roles: ["admin", "warehouse_manager", "dispatcher"] },

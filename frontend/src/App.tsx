@@ -2,7 +2,7 @@ import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { router } from "./router";
-import { SocketProvider } from "./context/SocketContext";
+import { SocketProvider } from "./constants/SocketContext";
 
 function App() {
   return (

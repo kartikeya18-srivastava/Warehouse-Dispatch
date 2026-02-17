@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useSocket } from '../context/SocketContext';
+import { useSocket } from '../constants/SocketContext';
 import type { LocationPoint, StatusHistoryEntry } from '../types';
 
 interface LocationUpdatePayload {

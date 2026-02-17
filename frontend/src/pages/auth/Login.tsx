@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import { useNavigate, Link, useNavigationType } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useLoginMutation } from "../../services/authApi";
 import { setCredentials } from "../../store/reducers/authReducer";
-import Button from "../../components/Button";
-import Input from "../../components/Input";
-import Card from "../../components/Card";
+import { Icons } from "../../components/Icons";
 
 const loginSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -18,31 +16,25 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
-    const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const navType = useNavigationType();
     const [login, { isLoading }] = useLoginMutation();
     const [error, setError] = useState<string | null>(null);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     useEffect(() => {
-        if (searchParams.get("verified") === "true") {
-            setSuccessMessage("Email verified successfully! You can now log in.");
+        // Redirect to landing if the page was reloaded or accessed via back button (POP)
+        if (navType === "POP") {
+            navigate("/", { replace: true });
         }
-        const errorType = searchParams.get("error");
-        if (errorType === "verification_failed") {
-            setError("Email verification failed. The link may be expired.");
-        } else if (errorType === "token_required") {
-            setError("Verification token is missing.");
-        }
-    }, [searchParams]);
+    }, [navType, navigate]);
 
     const {
         register,
         handleSubmit,
-        formState: { errors }
+        formState: { errors },
     } = useForm<LoginFormValues>({
-        resolver: zodResolver(loginSchema)
+        resolver: zodResolver(loginSchema),
     });
 
     const onSubmit = async (data: LoginFormValues) => {
@@ -56,7 +48,7 @@ const LoginPage = () => {
             }));
 
             localStorage.setItem("refreshToken", result.refreshToken);
-            navigate("/");
+            navigate("/dashboard");
         } catch (err: unknown) {
             setError("Invalid credentials or server error. Please try again.");
             console.error("Login failed:", err);
@@ -65,65 +57,105 @@ const LoginPage = () => {
 
     return (
         <div className="w-full">
-            <div className="text-center mb-8">
-                <h1 className="text-4xl font-black text-slate-900 mb-2">Welcome Back</h1>
-                <p className="text-slate-500 font-medium">Log in to manage your warehouse operations</p>
+            <div className="text-center mb-10">
+                <h1 className="text-4xl font-black text-txt-main mb-3 tracking-tighter">
+                    Welcome Back
+                </h1>
+                <p className="text-sm text-txt-muted font-medium uppercase tracking-widest">Access your WAREFLOW Console</p>
             </div>
 
-            <Card className="glass shadow-2xl p-8">
-                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+            <div className="p-10 rounded-[2.5rem] bg-white border border-border-subtle shadow-2xl shadow-slate-200/50">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                     {error && (
-                        <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium animate-in fade-in slide-in-from-top-2">
-                            {error}
+                        <div className="p-4 rounded-2xl bg-red-50 border border-red-100 text-red-600 text-[10px] font-black uppercase tracking-widest animate-in fade-in slide-in-from-top-2 flex items-center gap-3">
+                            <Icons.AlertCircle className="w-5 h-5 flex-shrink-0" />
+                            <span>{error}</span>
                         </div>
                     )}
 
-                    {successMessage && (
-                        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 text-sm font-medium animate-in fade-in slide-in-from-top-2">
-                            {successMessage}
-                        </div>
-                    )}
-
-                    <Input
-                        label="Email Address"
-                        placeholder="name@company.com"
-                        error={errors.email?.message}
-                        {...register("email")}
-                    />
-
-                    <Input
-                        label="Password"
-                        type="password"
-                        placeholder="••••••••"
-                        error={errors.password?.message}
-                        {...register("password")}
-                    />
-
-                    <div className="flex items-center justify-between text-sm mt-1">
-                        <label className="flex items-center gap-2 text-slate-600 font-medium cursor-pointer">
-                            <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20" />
-                            Remember me
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black text-txt-muted uppercase tracking-[0.2em] ml-1">
+                            Control Identity
                         </label>
-                        <a href="#" className="text-primary font-bold hover:underline">Forgot password?</a>
+                        <div className="relative group">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-txt-muted group-focus-within:text-primary transition-colors">
+                                <Icons.Users className="w-5 h-5" />
+                            </div>
+                            <input
+                                type="email"
+                                placeholder="name@company.com"
+                                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 border border-slate-100 text-txt-main placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all font-bold text-sm"
+                                {...register("email")}
+                            />
+                        </div>
+                        {errors.email && (
+                            <p className="text-[10px] font-black text-red-500 mt-1 ml-1 uppercase tracking-tight">
+                                {errors.email.message}
+                            </p>
+                        )}
                     </div>
 
-                    <Button type="submit" isLoading={isLoading} className="w-full mt-2">
-                        Sign In
-                    </Button>
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black text-txt-muted uppercase tracking-[0.2em] ml-1">
+                            Access Protocol
+                        </label>
+                        <div className="relative group">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-txt-muted group-focus-within:text-primary transition-colors">
+                                <Icons.Zap className="w-5 h-5" />
+                            </div>
+                            <input
+                                type="password"
+                                placeholder="••••••••"
+                                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 border border-slate-100 text-txt-main placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all font-bold text-sm"
+                                {...register("password")}
+                            />
+                        </div>
+                        {errors.password && (
+                            <p className="text-[10px] font-black text-red-500 mt-1 ml-1 uppercase tracking-tight">
+                                {errors.password.message}
+                            </p>
+                        )}
+                    </div>
+
+                    <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest pt-2">
+                        <label className="flex items-center gap-2 text-txt-muted cursor-pointer group">
+                            <input type="checkbox" className="w-4 h-4 rounded-lg border-slate-200 text-primary focus:ring-primary/20 transition-all cursor-pointer" />
+                            <span className="group-hover:text-txt-main transition-colors">Keep Session</span>
+                        </label>
+                        <a href="#" className="text-primary hover:text-secondary transition-colors underline decoration-primary/20 underline-offset-4">Forgot Entry?</a>
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="w-full btn-premium btn-primary py-5 text-xs shadow-xl shadow-primary/30 active:scale-95 disabled:opacity-50"
+                    >
+                        {isLoading ? (
+                            <div className="flex items-center justify-center gap-3">
+                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                Authenticating...
+                            </div>
+                        ) : (
+                            "Initiate Console Session"
+                        )}
+                    </button>
                 </form>
 
-                <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-                    <p className="text-sm text-slate-500 font-medium">
-                        Don't have an account?{" "}
-                        <Link to="/register" className="text-primary font-bold hover:underline">Register now</Link>
+                <div className="mt-10 pt-8 border-t border-border-subtle text-center">
+                    <p className="text-[10px] font-black text-txt-muted uppercase tracking-[0.15em]">
+                        New Terminal User?{" "}
+                        <Link to="/register" className="text-primary hover:text-secondary transition-colors underline decoration-primary/20 underline-offset-4">
+                            Register now
+                        </Link>
                     </p>
                 </div>
-            </Card>
+            </div>
 
             <div className="mt-12 text-center">
-                <p className="text-xs text-slate-400 font-medium tracking-widest uppercase">
-                    Trusted by 500+ Fulfillment Centers
-                </p>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-border-subtle shadow-sm">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[9px] font-black text-txt-muted uppercase tracking-[0.2em]">WAREFLOW Global Network v4.2</span>
+                </div>
             </div>
         </div>
     );

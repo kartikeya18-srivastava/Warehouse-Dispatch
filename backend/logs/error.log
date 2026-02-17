@@ -44,3 +44,6 @@
 {"error":{},"level":"error","message":"Unhandled error","timestamp":"2026-02-17T10:03:22.578Z"}
 {"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Unhandled error","timestamp":"2026-02-17T10:15:35.790Z"}
 {"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Unhandled error","timestamp":"2026-02-17T10:22:19.514Z"}
+{"error":{},"level":"error","message":"Unhandled error","timestamp":"2026-02-17T10:46:26.600Z"}
+{"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Unhandled error","timestamp":"2026-02-17T11:02:42.525Z"}
+{"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Unhandled error","timestamp":"2026-02-17T11:09:15.524Z"}

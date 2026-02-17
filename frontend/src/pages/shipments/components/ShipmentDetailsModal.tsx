@@ -15,7 +15,7 @@ interface ShipmentDetailsModalProps {
 const ShipmentDetailsModal = ({ isOpen, onClose, shipment }: ShipmentDetailsModalProps) => {
     console.log("ShipmentDetailsModal render - isOpen:", isOpen, "shipment:", shipment);
 
-    // Subscribe to real-time updates for this shipment
+
     const { currentLocation, estimatedDeliveryTime, latestStatus, isConnected } = useShipmentTracking(
         isOpen && shipment ? shipment._id : null
     );
@@ -24,12 +24,12 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment }: ShipmentDetailsModa
 
     const shipmentIdSuffix = shipment?._id ? shipment._id.slice(-6).toUpperCase() : 'N/A';
 
-    // Use real-time location if available, otherwise use shipment's stored location
+
     const displayLocation = currentLocation || shipment.currentLocation;
     const displayETA = estimatedDeliveryTime || shipment.estimatedDeliveryTime;
     const displayStatus = latestStatus?.status || shipment.status;
 
-    // Show tracking map for shipments in transit
+
     const showMap = ['IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DISPATCHED'].includes(displayStatus);
 
     return (
@@ -37,7 +37,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment }: ShipmentDetailsModa
             <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-md" onClick={onClose} />
 
             <Card className="relative w-full max-w-2xl max-h-[90vh] bg-white border-none shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] overflow-hidden rounded-[2.5rem] p-0 animate-in fade-in zoom-in duration-300 flex flex-col">
-                {/* Header Section */}
+
                 <div className="bg-slate-950 p-8 text-white relative overflow-hidden">
                     <div className="absolute right-0 top-0 w-64 h-64 bg-primary/20 rounded-full blur-[80px] -mr-32 -mt-32" />
                     <div className="relative z-10 flex justify-between items-start">
@@ -66,7 +66,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment }: ShipmentDetailsModa
                 </div>
 
                 <div className="p-8 space-y-6 overflow-y-auto flex-1">
-                    {/* Primary Info Grid */}
+
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         <div className="space-y-1">
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">SKU Reference</p>
@@ -91,11 +91,11 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment }: ShipmentDetailsModa
 
                     <div className="h-px bg-slate-100" />
 
-                    {/* Two Column Layout: Details on Left, Map on Right */}
+
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        {/* Left Column: Shipment Details */}
+
                         <div className="space-y-6">
-                            {/* Route Info */}
+
                             <div className="space-y-6">
                                 <div className="flex gap-4">
                                     <div className="flex flex-col items-center">
@@ -119,7 +119,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment }: ShipmentDetailsModa
                                 </div>
                             </div>
 
-                            {/* Physical Specs */}
+
                             <div className="bg-slate-50 rounded-3xl p-6 space-y-4">
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Specifications</p>
                                 <div className="flex justify-between items-center text-sm">
@@ -136,7 +136,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment }: ShipmentDetailsModa
                                 </div>
                             </div>
 
-                            {/* Meta Information */}
+
                             <div className="space-y-4">
                                 <div>
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Manifest Association</p>
@@ -149,7 +149,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment }: ShipmentDetailsModa
                             </div>
                         </div>
 
-                        {/* Right Column: Live Tracking Map */}
+
                         {showMap && (
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
@@ -173,7 +173,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment }: ShipmentDetailsModa
 
                     <div className="h-px bg-slate-100" />
 
-                    {/* Status Timeline - Full Width */}
+
                     <div>
                         <StatusTimeline
                             statusHistory={shipment.statusHistory || []}
@@ -182,7 +182,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment }: ShipmentDetailsModa
                     </div>
                 </div>
 
-                {/* Footer Actions */}
+
                 <div className="p-8 pt-0 flex justify-end flex-shrink-0">
                     <button
                         onClick={onClose}
